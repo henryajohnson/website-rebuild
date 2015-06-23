@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
+
+
+	<style>
+		html,body{
+			font-size: 10px;
+		}
+
+	</style>
+</head>
+<body ng-app="myBlog">
+	<h1>Testing<h1>
+	<div class="main" ng-controller="blogController">
+		<h1>{{title}}</h1>
+		<div ng-repeat="entry in blog | orderBy:orderProp | limitTo:quantity">
+			<p class="title">{{ entry.id }}</p> 
+            <p class="price">{{ entry.title }}</p> 
+            <p class="date">{{ entry.entry }}</p> 
+        </div>
+
+	</div>
+
+
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="libs/jquery-1.11.0.min.js"><\/script>')</script>
+    <script>
+    // App
+    var app = angular.module("myBlog", []);
+
+    // Controller
+    app.controller('blogController', ['$scope', function($scope) { 
+	  $scope.title = 'Just kidding'; 
+	  $scope.orderProp = 'id';
+	  $scope.quantity = 10;
+	  $scope.blog = 
+	  	[
+		    {
+		        id: 1,
+		        title: 'Day One',
+		        entry: 'Hello this is day one', 
+		    },
+		    {
+		        id: 2,
+		        title: 'Learning Python',
+		        entry: 'Just trying to learn Python', 
+		    }
+		]
+
+	}]);
+
+    </script>
+</body>
+</html>
