@@ -13,7 +13,7 @@ blog = [
     {
         'id': 2,
         'title': u'Learning Python',
-        'description': u'Just trying to learn Python'
+        'entry': u'Just trying to learn Python'
     }
 ]
 
