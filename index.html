@@ -9,7 +9,6 @@
 		html,body{
 			font-size: 10px;
 		}
-
 	</style>
 </head>
 <body ng-app="myBlog">
@@ -17,9 +16,9 @@
 	<div class="main" ng-controller="blogController">
 		<h1>{{title}}</h1>
 		<div ng-repeat="entry in blog | orderBy:orderProp | limitTo:quantity">
-			<p class="title">{{ entry.id }}</p> 
-            <p class="price">{{ entry.title }}</p> 
-            <p class="date">{{ entry.entry }}</p> 
+			<p class="title">{{ entry.entryTitle }}</p> 
+            <p class="price">{{ entry.entryPassage }}</p> 
+            <p class="date">{{ entry.entryDate }}</p> 
         </div>
 
 	</div>
@@ -31,28 +30,18 @@
     <script>
     // App
     var app = angular.module("myBlog", []);
-
     // Controller
-    app.controller('blogController', ['$scope', function($scope) { 
+    app.controller('blogController', function($scope, $http) { 
 	  $scope.title = 'Just kidding'; 
 	  $scope.orderProp = 'id';
 	  $scope.quantity = 10;
-	  $scope.blog = 
-	  	[
-		    {
-		        id: 1,
-		        title: 'Day One',
-		        entry: 'Hello this is day one', 
-		    },
-		    {
-		        id: 2,
-		        title: 'Learning Python',
-		        entry: 'Just trying to learn Python', 
-		    }
-		]
-
-	}]);
-
+	  $scope.blog = [];
+	  $http.get('//[]]/blog/api/v1.0/entries')
+		  .then(function(response) {
+		    $scope.blog = response.data;
+		    console.log(response);
+		});
+	});
     </script>
 </body>
 </html>
