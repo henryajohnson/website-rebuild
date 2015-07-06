@@ -7,19 +7,109 @@
 
 	<style>
 		html,body{
-			font-size: 10px;
+			color: #838B8B;
+			font-family: Georgia;
+			font-size: 20px;
+		}
+		#side-menu{
+			font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+			position: fixed;
+			background-color: #EED6AF;
+			height: 100%;
+			width: 25%;
+			right: 0;
+			top: 0;
+			-webkit-transform-style: preserve-3d;
+			-moz-transform-style: preserve-3d;
+			transform-style: preserve-3d;
+			min-width: 200px;
+		}
+		#inner-side-menu{
+			position: relative;
+			top: 45%;
+			margin-left: 5%;
+			-webkit-transform: translateY(-50%);
+			-ms-transform: translateY(-50%);
+			transform: translateY(-50%);
+		}
+		#side-title{
+			margin: 0;
+		}
+		#picture{
+			width: 50%;
+			margin: 2% auto 0;
+			padding-right: 5%;
+			display: block;
+		}
+		#inner-side-menu .links{
+			cursor: pointer;
+			display: inline-block;
+			position: relative;
+			border-bottom: 1px solid #EED6AF;
+			transition: border .25s ease-in-out;
+		    -moz-transition: border .25s ease-in-out;
+		    -webkit-transition: border .25s ease-in-out;
+		}
+		#inner-side-menu .links:hover{
+			border-bottom: 1px solid #838B8B;
+		}
+		#inner-side-menu .links a{
+			color: inherit;
+			text-decoration: none;
+		}
+
+		#blog-container{
+			width: 70%;
+			height: 100%;
+			margin: 0 0 0 1%;
+			left: 0;
+			position:relative;
+		}
+		#blog-container .title, #blog-container .date{
+			position: relative;
+			margin: 0;
+		}
+		.blog-titles{
+			/*display:none;*/
+		}
+		
+
+		@media (max-width: 800px) {
+		  #side-menu {
+		    display: none;
+		  }
+		  #blog-container{
+		  	width: 100%;
+		  }
 		}
 	</style>
 </head>
 <body ng-app="myBlog">
-	<h1>Testing<h1>
 	<div class="main" ng-controller="blogController">
-		<h1>{{title}}</h1>
-		<div ng-repeat="entry in blog | orderBy:orderProp | limitTo:quantity">
-			<p class="title">{{ entry.entryTitle }}</p> 
-            <p class="price">{{ entry.entryPassage }}</p> 
-            <p class="date">{{ entry.entryDate }}</p> 
-        </div>
+		<div id="side-menu">
+			<div id="inner-side-menu">
+				<h2 id="side-title">Explorations in Tech</h2>
+				<div id="name">With Henry Johnson</div>
+				<img src="img/henry.jpg" id="picture" alt="Picture of Henry" title="Picture of Henry">
+				<div class="links">Home</div><br />
+				<div class="links" id="titles-link">Blog Entry Titles</div><br />
+				<div class="links"><a href="">GitHub</a></div><br />
+				<div class="links"><a href="">LinkedIn</a></div>
+			</div>
+		</div>
+		<div id="blog-container">
+			<div class="blog-home" ng-repeat="entry in blog | orderBy:orderProp | limitTo:quantity">
+				<h2 class="title">{{ entry.entryTitle }}</h2> 
+	            <p class="date">Written on {{ entry.entryDate }}</p> 
+	            <p class="text">{{ entry.entryPassage }}</p> 
+	        </div>
+	        <div class="blog-titles" data-link="{{title.uri}}" ng-repeat="title in titles | orderBy:orderProp | limitTo:quantity">
+	        	<h2 class="title">{{ title.entryTitle }}</h2>
+	        	<p class="date">Written on {{ title.entryDate }} </p>
+	        	<span class="id" style="display:none;">{{title.ID}}</span>
+	        </div>
+	    </div>
+
 
 	</div>
 
@@ -30,17 +120,28 @@
     <script>
     // App
     var app = angular.module("myBlog", []);
+
     // Controller
     app.controller('blogController', function($scope, $http) { 
-	  $scope.title = 'Just kidding'; 
-	  $scope.orderProp = 'id';
-	  $scope.quantity = 10;
-	  $scope.blog = [];
-	  $http.get('//[]]/blog/api/v1.0/entries')
+	  	$scope.title = 'Just kidding'; 
+	  	$scope.orderProp = 'id';
+	  	$scope.quantity = 10;
+	  	$scope.blog = [];
+	  	$http.get('// /blog/api/v1.0/entries')
 		  .then(function(response) {
 		    $scope.blog = response.data;
 		    console.log(response);
 		});
+		$scope.titles = [];
+	  	$('#titles-link').on('click', function(){
+	  		$('.blog-home').hide();
+	  		$http.get('// /blog/api/v1.0/titles')
+			  .then(function(response) {
+			    $scope.titles = response.data;
+			    console.log(response);
+			    $('.blog-titles').fadeIn('fast');
+			});
+	  	});
 	});
     </script>
 </body>
